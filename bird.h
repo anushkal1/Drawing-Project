@@ -32,6 +32,11 @@ class Animal {
         belly(bell);
         isRound = false;
     }
+	
+    unordered_map<string, color> mainColors;
+    mainColors["black"] = color(0, 0, 0);
+    mainColors["white"] = color(255, 255, 255);
+    mainColors["beakColor"] = color(255, 175, 0);
 
     ellipse& getBodyE() { return bodyRound; }
     Polygon& getBodyP() { return bodyTriangle; }
