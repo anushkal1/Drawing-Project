@@ -3,13 +3,13 @@
 
 #include <vector>
 #include <memory>
+#include <unordered_map>
 #include "ppmR.h"
 #include "color.h"
 #include "rect.h"
 #include "ellipse.h"
 #include "polygon.h"
 #include "vec2.h"
-#include <map>
 
 class Animal {
     public:
