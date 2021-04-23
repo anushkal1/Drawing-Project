@@ -4,6 +4,7 @@
 #include <fstream>
 #include <vector>
 #include <memory>
+#include <unordered_map>
 #include "ppmR.h"
 #include "color.h"
 #include "rect.h"
@@ -73,6 +74,20 @@ void writeOut(ostream& out, ppmR& theWriter,
 
 /*read command line arguments and write out new ascii file of given size */
 int main(int argc, char *argv[]) {
+	unordered_map<string, color> redBirdColors;
+	redBirdColors["red"] = color(216, 0, 38);
+	redBirdColors["dark red"] = color(170, 0, 30);
+	redBirdColors["desert sand"] = color(227, 196, 166);
+
+	unordered_map<string, color> yellowBirdColors;
+	yellowBirdColors["main yellow"] = color(242, 221, 0);
+	yellowBirdColors["reflective yellow"] = color(250, 255, 209);
+	yellowBirdColors["red"] = color(180, 53, 0);
+
+	unordered_map<string, color> pigColors;
+	pigColors["green"] = color(13, 186, 22);
+	pigColors["outlined green"] = color(5, 132, 12);
+	pigColors["dark green"] = color(38, 115, 42);
 
 	ofstream outFile;
 	int sizeX, sizeY;
