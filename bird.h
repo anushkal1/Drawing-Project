@@ -13,37 +13,15 @@
 
 class Animal {
     public:
-    Animal(ellipse& body, std::vector<ellipse>& e, std::vector<Polygon>& b, std::vector<Polygon>& t, std::vector<Polygon>& eb, ellipse& bell) {
-        bodyRound(body);
-        eyes(e);
-        beak(b);
-        tail(t);
-        eyebrows(eb);
-        belly(bell);
-        isRound = true;
+    Animal(ellipse& body, std::vector<ellipse>& e, std::vector<Polygon>& b, std::vector<Polygon>& t, std::vector<Polygon>& eb, ellipse& bell): bodyRound(body), eyes(e), beak(b), tail(t), 
+    eyebrows(eb), belly(bell) {
+      
     }
-
-    Animal(Polygon& body, std::vector<ellipse>& e, std::vector<Polygon>& b, std::vector<Polygon>& t, std::vector<Polygon>& eb, ellipse& bell) {
-        bodyTriangle(body);
-        eyes(e);
-        beak(b);
-        tail(t);
-        eyebrows(eb);
-        belly(bell);
-        isRound = false;
-    }
-
-    unordered_map<string, color> mainColors;
-    mainColors["black"] = color(0, 0, 0);
-    mainColors["white"] = color(255, 255, 255);
-    mainColors["beakColor"] = color(255, 175, 0);
-
     ellipse& getBodyE() { return bodyRound; }
-    Polygon& getBodyP() { return bodyTriangle; }
     std::vector<ellipse>& getEyes() { return eyes; }
     std::vector<Polygon>& getBeak() { return beak; }
-    std::vector<Polgon>& getTail() { return tail; }
-    std::vector<Polgon>& getEyebrows() { return eyebrows; }
+    std::vector<Polygon>& getTail() { return tail; }
+    std::vector<Polygon>& getEyebrows() { return eyebrows; }
     ellipse& getBelly() { return belly; }
 
     color eval(int x, int y, color background) {
@@ -65,24 +43,15 @@ class Animal {
   		  }
   		}
 
-      if (isRound) {
-          if (bodyRound.eval(x,y) < 1) {
+
+      if (bodyRound.eval(x,y) < 1) {
               inC = bodyRound.getInC();
               if (belly.eval(x,y)) {
                 inC = belly.getInC();
               }
               inTrue = true;
-          }
-      } else {
-          if (bodyTriangle.eval(x,y)) {
-              inC = bodyTriangle.getInC();
-              if (belly.eval(x,y)) {
-                inC = belly.getInC();
-              }
-              inTrue = true;
-          }
-      }
-
+      }    
+     
       curDepth = -1.0;
   		for (auto obj : eyes) {
   		  res = obj.eval(x, y);
@@ -123,13 +92,11 @@ class Animal {
 
     void translate(vec2 offset) {
 
-      if (isRound) {
+
           bodyRound.translate(offset); // does this need & ?
-      } else {
-          bodyTriangle.translate(offset); // does this need & ?
-      }
+      
       for (ellipse & e : eyes) {
-        poly.translate(offset);
+        e.translate(offset);
       }
       for (Polygon & p : beak) {
         p.translate(offset);
@@ -144,12 +111,11 @@ class Animal {
 
       return;
     }
+    
 
 
     private:
-        bool isRound;
         ellipse& bodyRound;
-        Polygon& bodyTriangle;
         std::vector<ellipse>& eyes;
         std::vector<Polygon>& beak;
         std::vector<Polygon>& tail;

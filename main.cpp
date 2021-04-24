@@ -10,6 +10,7 @@
 #include "rect.h"
 #include "ellipse.h"
 #include "polygon.h"
+#include "bird.h"
 
 using namespace std;
 
@@ -79,6 +80,12 @@ int main(int argc, char *argv[]) {
 	redBirdColors["dark red"] = color(170, 0, 30);
 	redBirdColors["desert sand"] = color(227, 196, 166);
 
+	unordered_map<std::string, color> mainColors = {
+      {"black", color(0, 0, 0) },
+      {"white", color(255, 255, 255) },
+      {"beakColor", color(255, 175, 0)}
+    };
+	
 	unordered_map<string, color> yellowBirdColors;
 	yellowBirdColors["main yellow"] = color(242, 221, 0);
 	yellowBirdColors["reflective yellow"] = color(250, 255, 209);
@@ -96,6 +103,7 @@ int main(int argc, char *argv[]) {
 	ofstream outFile;
 	int sizeX, sizeY;
 
+	Animal redBird = Animal();
 	vector<shared_ptr<ellipse>> theEllipses;
 	vector<shared_ptr<Rect>> theRects;
 	vector<shared_ptr<Polygon>> thePolys;
@@ -163,7 +171,7 @@ int main(int argc, char *argv[]) {
 	vec2 accel(0, 1);
 
 	//loop through and produce more than on image - change to 30
-	for (int i=0; i < 30; i++) {
+	for (int i=0; i < 3; i++) {
 
 	  trans1 = trans1 + accel;
 	  trans2 = trans2 + accel;
