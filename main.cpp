@@ -83,6 +83,10 @@ int main(int argc, char *argv[]) {
 	yellowBirdColors["main yellow"] = color(242, 221, 0);
 	yellowBirdColors["reflective yellow"] = color(250, 255, 209);
 	yellowBirdColors["red"] = color(180, 53, 0);
+	
+	unordered_map<string, color> blackBirdColors;
+	blackBirdColors["tinted black"] = color(68, 68, 68);
+	blackBirdColors["red"] = color(198, 68, 0);
 
 	unordered_map<string, color> pigColors;
 	pigColors["green"] = color(13, 186, 22);
