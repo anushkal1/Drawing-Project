@@ -121,6 +121,30 @@ class Animal {
 
     }
 
+    void translate(vec2 offset) {
+
+      if (isRound) {
+          bodyRound.translate(offset); // does this need & ?
+      } else {
+          bodyTriangle.translate(offset); // does this need & ?
+      }
+      for (ellipse & e : eyes) {
+        poly.translate(offset);
+      }
+      for (Polygon & p : beak) {
+        p.translate(offset);
+      }
+      for (Polygon & p : tail) {
+        p.translate(offset);
+      }
+      for (Polygon & p : eyebrows) {
+        p.translate(offset);
+      }
+      belly.translate(offset); // does this need & ?
+
+      return;
+    }
+
 
     private:
         bool isRound;
