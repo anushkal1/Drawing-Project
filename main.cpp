@@ -11,14 +11,15 @@
 #include "ellipse.h"
 #include "polygon.h"
 #include "bird.h"
+#include "bird.h"
 
 using namespace std;
 
-/*write out PPM data, using the defined implicit equation 
+/*write out PPM data, using the defined implicit equation
   interior points write a different color then exterior points */
 
-void writeOut(ostream& out, ppmR& theWriter,  
-				vector<shared_ptr<ellipse>> IEs, 
+void writeOut(ostream& out, ppmR& theWriter,
+				vector<shared_ptr<ellipse>> IEs,
 				vector<shared_ptr<Rect> > Rs,
 				vector<shared_ptr<Polygon> > Ps) {
 
@@ -62,7 +63,7 @@ void writeOut(ostream& out, ppmR& theWriter,
 				}
 			}
 
-			if (inTrue) {			
+			if (inTrue) {
 				theWriter.writePixel(out, x, y, inC);
 			}
 			else
@@ -85,25 +86,25 @@ int main(int argc, char *argv[]) {
       {"white", color(255, 255, 255) },
       {"beakColor", color(255, 175, 0)}
     };
-	
+
 	unordered_map<string, color> yellowBirdColors;
 	yellowBirdColors["main yellow"] = color(242, 221, 0);
 	yellowBirdColors["reflective yellow"] = color(250, 255, 209);
 	yellowBirdColors["red"] = color(180, 53, 0);
-	
+
 	unordered_map<string, color> blackBirdColors;
 	blackBirdColors["tinted black"] = color(68, 68, 68);
 	blackBirdColors["red"] = color(198, 68, 0);
 
-	unordered_map<string, color> pigColors;
-	pigColors["green"] = color(13, 186, 22);
-	pigColors["outlined green"] = color(5, 132, 12);
-	pigColors["dark green"] = color(38, 115, 42);
+	unordered_map<string, color> birdColors;
+	birdColors["green"] = color(13, 186, 22);
+	birdColors["outlined green"] = color(5, 132, 12);
+	birdColors["dark green"] = color(38, 115, 42);
 
 	ofstream outFile;
 	int sizeX, sizeY;
 
-	Animal redBird = Animal();
+	bird redBird = bird();
 	vector<shared_ptr<ellipse>> theEllipses;
 	vector<shared_ptr<Rect>> theRects;
 	vector<shared_ptr<Polygon>> thePolys;
@@ -127,16 +128,16 @@ int main(int argc, char *argv[]) {
 	cout << "sizeX: " << sizeX << " sizeY: " << sizeY << endl;
 
 	for (int j=0; j < 15; j++) {
-		theEllipses.push_back(make_shared<ellipse>(vec2(nicerRand(10, sizeX-10), nicerRand(10, sizeX-10)), 
-								vec2(nicerRand(11, 20), nicerRand(11, 20)), nicerRand(1, 3), niceC[nicerRand(0,5)]));	
+		theEllipses.push_back(make_shared<ellipse>(vec2(nicerRand(10, sizeX-10), nicerRand(10, sizeX-10)),
+								vec2(nicerRand(11, 20), nicerRand(11, 20)), nicerRand(1, 3), niceC[nicerRand(0,5)]));
 	}
 
 	for (int i=0; i < 5; i++) {
-		theRects.push_back(make_shared<Rect>(vec2(nicerRand(10, sizeX-10), nicerRand(10, sizeX-10)), 
+		theRects.push_back(make_shared<Rect>(vec2(nicerRand(10, sizeX-10), nicerRand(10, sizeX-10)),
 				nicerRand(8, 23), nicerRand(7, 22), color(nicerRand(23, 210)), nicerRand(1, 3)));
 	}
 
-	//create a vector of vertices for the triangle 
+	//create a vector of vertices for the triangle
 	//vertices specified counter clockwise!
 	vector<vec2> triVerts;
 	triVerts.push_back(vec2(100, 50));
@@ -176,7 +177,7 @@ int main(int argc, char *argv[]) {
 	  trans1 = trans1 + accel;
 	  trans2 = trans2 + accel;
 	  trans3 = trans3 + accel;
-	  
+
 	  //set up unique filename that conforms to processign movie maker
 	  outFilename.append(argv[3]);
 	  if (i < 10)
@@ -198,7 +199,7 @@ int main(int argc, char *argv[]) {
 		  for (auto r : theRects) {
 		  	r->translate(trans2);
 		  }
-		  
+
 		  writeOut(outFile, theWriter, theEllipses, theRects, thePolys);
 		  outFile.close();
 		  outFilename.erase();

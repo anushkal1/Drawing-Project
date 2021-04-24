@@ -1,5 +1,5 @@
-#ifndef BIRD_H
-#define BIRD_H
+#ifndef PIG_H
+#define PIG_H
 
 #include <vector>
 #include <memory>
@@ -11,15 +11,15 @@
 #include "polygon.h"
 #include "vec2.h"
 
-class Bird {
+class Pig {
     public:
-    Bird(ellipse& body, std::vector<ellipse>& e, std::vector<Polygon>& b,
+    Pig(ellipse& body, std::vector<ellipse>& e, std::vector<ellipse>& b,
       std::vector<Polygon>& t, std::vector<Polygon>& eb, ellipse& bell):
-      bodyRound(body), eyes(e), beak(b), tail(t), eyebrows(eb), belly(bell) {}
+      bodyRound(body), eyes(e), snout(b), tail(t), eyebrows(eb), belly(bell) {}
 
     ellipse& getBodyE() { return bodyRound; }
     std::vector<ellipse>& getEyes() { return eyes; }
-    std::vector<Polygon>& getBeak() { return beak; }
+    std::vector<ellipse>& getSnout() { return snout; }
     std::vector<Polygon>& getTail() { return tail; }
     std::vector<Polygon>& getEyebrows() { return eyebrows; }
     ellipse& getBelly() { return belly; }
@@ -73,7 +73,7 @@ class Bird {
    		 }
 
       curDepth = -1.0;
-   		for (auto obj : beak) {
+   		for (auto obj : snout) {
    		  res = obj.eval(x, y);
    		  if (res < 0 && obj.getDepth() > curDepth) {
    			inC = obj.getInC();
@@ -93,12 +93,12 @@ class Bird {
     void translate(vec2 offset) {
 
 
-          bodyRound.translate(offset); // does this need & ?
+      bodyRound.translate(offset); // does this need & ?
 
       for (ellipse & e : eyes) {
         e.translate(offset);
       }
-      for (Polygon & p : beak) {
+      for (Polygon & p : snout) {
         p.translate(offset);
       }
       for (Polygon & p : tail) {
@@ -117,7 +117,7 @@ class Bird {
     private:
         ellipse& bodyRound;
         std::vector<ellipse>& eyes;
-        std::vector<Polygon>& beak;
+        std::vector<ellipse>& snout;
         std::vector<Polygon>& tail;
         std::vector<Polygon>& eyebrows;
         ellipse& belly;
