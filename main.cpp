@@ -104,7 +104,7 @@ int main(int argc, char *argv[]) {
 	ofstream outFile;
 	int sizeX, sizeY;
 
-	bird redBird = bird();
+	Bird redBird = Bird();
 	vector<shared_ptr<ellipse>> theEllipses;
 	vector<shared_ptr<Rect>> theRects;
 	vector<shared_ptr<Polygon>> thePolys;
