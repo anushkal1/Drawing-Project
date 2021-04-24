@@ -32,7 +32,7 @@ class Animal {
         belly(bell);
         isRound = false;
     }
-	
+
     unordered_map<string, color> mainColors;
     mainColors["black"] = color(0, 0, 0);
     mainColors["white"] = color(255, 255, 255);
@@ -46,23 +46,80 @@ class Animal {
     std::vector<Polgon>& getEyebrows() { return eyebrows; }
     ellipse& getBelly() { return belly; }
 
-    bool eval(double x, double y) {
-        if (isRound) {
-            if (bodyRound.eval(x,y) < 1) {
-                return true;
-            }
-        } else {
-            if (bodyTriangle.eval(x,y)) {
-                return true;
-            }
-        }
-        for (int i = 0; i < 100; i++) {
-            if (eyes.at(i).eval(x,y) < 1 || belly.eval(x,y) < 1 || beak.at(i).eval(x,y) || tail.at(i).eval(x,y) || eyebrows.at(i).eval(x,y)) {
-                return true;
-            }
-        }
-		return false;
-	}
+    color eval(int x, int y, color background) {
+
+      // this looks really inefficient and redundant and it is
+      // but afaik can't really do anything about it bc of the type differences
+
+      float res;
+  		color inC;
+  		bool inTrue = false;
+  		double curDepth = -1.0;
+
+      for (auto obj : tail) {
+  		  res = obj.eval(x, y);
+  		  if (res < 0 && obj.getDepth() > curDepth) {
+  			inC = obj.getInC();
+  			inTrue = true;
+  			curDepth = obj.getDepth();
+  		  }
+  		}
+
+      if (isRound) {
+          if (bodyRound.eval(x,y) < 1) {
+              inC = bodyRound.getInC();
+              if (belly.eval(x,y)) {
+                inC = belly.getInC();
+              }
+              inTrue = true;
+          }
+      } else {
+          if (bodyTriangle.eval(x,y)) {
+              inC = bodyTriangle.getInC();
+              if (belly.eval(x,y)) {
+                inC = belly.getInC();
+              }
+              inTrue = true;
+          }
+      }
+
+      curDepth = -1.0;
+  		for (auto obj : eyes) {
+  		  res = obj.eval(x, y);
+  		  if (res < 0 && obj.getDepth() > curDepth) {
+  			inC = obj.getInC();
+  			inTrue = true;
+  			curDepth = obj.getDepth();
+  		  }
+  		 }
+
+      curDepth = -1.0;
+   		for (auto obj : eyebrows) {
+   		  res = obj.eval(x, y);
+   		  if (res < 0 && obj.getDepth() > curDepth) {
+   			inC = obj.getInC();
+   			inTrue = true;
+   			curDepth = obj.getDepth();
+   		  }
+   		 }
+
+      curDepth = -1.0;
+   		for (auto obj : beak) {
+   		  res = obj.eval(x, y);
+   		  if (res < 0 && obj.getDepth() > curDepth) {
+   			inC = obj.getInC();
+   			inTrue = true;
+   			curDepth = obj.getDepth();
+   		  }
+   		 }
+
+  		if (inTrue) {
+  			return inC;
+  		}
+  		else
+  			return background;
+
+    }
 
 
     private:
@@ -74,8 +131,6 @@ class Animal {
         std::vector<Polygon>& tail;
         std::vector<Polygon>& eyebrows;
         ellipse& belly;
-    
-
 
 };
 
