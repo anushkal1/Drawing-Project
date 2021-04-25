@@ -90,10 +90,6 @@ class Bird {
 
     }
 
-    bool alt_eval(int x, int y) {
-
-    }
-
     void translate(vec2 offset) {
 
 
