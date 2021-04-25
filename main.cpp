@@ -65,21 +65,13 @@ void writeOut(ostream& out, ppmR& theWriter, Bird blackBird, Pig piggy) {
 
 /*read command line arguments and write out new ascii file of given size */
 int main(int argc, char *argv[]) {
-	unordered_map<string, color> redBirdColors;
-	redBirdColors["red"] = color(216, 0, 38);
-	redBirdColors["dark red"] = color(170, 0, 30);
-	redBirdColors["desert sand"] = color(227, 196, 166);
 
-	unordered_map<std::string, color> mainColors = {
-      {"black", color(0, 0, 0) },
-      {"white", color(255, 255, 255) },
-      {"beakColor", color(255, 175, 0)}
-    };
+	// Colors
 
-	unordered_map<string, color> yellowBirdColors;
-	yellowBirdColors["main yellow"] = color(242, 221, 0);
-	yellowBirdColors["reflective yellow"] = color(250, 255, 209);
-	yellowBirdColors["red"] = color(180, 53, 0);
+	unordered_map<string, color> mainColors;
+	mainColors["black"] = color(0, 0, 0);
+	mainColors["white"] = color(255, 255, 255);
+	mainColors["beakColor"] = color(255, 175, 0);
 
 	unordered_map<string, color> blackBirdColors;
 	blackBirdColors["tinted black"] = color(68, 68, 68);
@@ -90,17 +82,26 @@ int main(int argc, char *argv[]) {
 	pigColors["outlined green"] = color(5, 132, 12);
 	pigColors["dark green"] = color(38, 115, 42);
 
-	ofstream outFile;
-	int sizeX, sizeY;
-
-
-
 	vector<color> niceC;
 	niceC.push_back(color(117, 119, 186));
 	niceC.push_back(color(45, 47, 135));
 	niceC.push_back(color(174, 209, 238));
 	niceC.push_back(color(239, 174, 115));
 	niceC.push_back(color(186, 140, 117));
+
+	/* // :'(
+	unordered_map<string, color> yellowBirdColors;
+	yellowBirdColors["main yellow"] = color(242, 221, 0);
+	yellowBirdColors["reflective yellow"] = color(250, 255, 209);
+	yellowBirdColors["red"] = color(180, 53, 0);
+
+	unordered_map<string, color> redBirdColors;
+	redBirdColors["red"] = color(216, 0, 38);
+	redBirdColors["dark red"] = color(170, 0, 30);
+	redBirdColors["desert sand"] = color(227, 196, 166);
+	*/
+
+	// BlackBird
 
 	ellipse blackBirdBody(vec2(30,30), vec2(20,20), 1.0, mainColors["black"]);
 	vector<ellipse> blackBirdEyes;
@@ -157,7 +158,8 @@ int main(int argc, char *argv[]) {
 	ellipse blackBirdBelly(vec2(30, 40), vec2(8,8), 2.0, blackBirdColors["tinted black"]);
 	Bird blackBird(blackBirdBody, blackBirdEyes, blackBirdBeak, blackBirdTail, blackBirdEyebrows, blackBirdBelly);
 
-	// CREATING PIG
+	// Pig
+
 	ellipse pigBody(vec2(150,150), vec2(120,80), 1, pigColors["green"]);
 	vector<ellipse> pigEyes;
 	pigEyes.push_back(ellipse(vec2(210,140), vec2(20,20), 2, mainColors["white"]));
@@ -181,6 +183,9 @@ int main(int argc, char *argv[]) {
 
 
 
+	ofstream outFile;
+	int sizeX, sizeY;
+
 	if (argc < 4) {
 		cerr << "Error format: a.out sizeX sizeY outfileName" << endl;
 		exit(0);
@@ -193,11 +198,6 @@ int main(int argc, char *argv[]) {
 
 	cout << "sizeX: " << sizeX << " sizeY: " << sizeY << endl;
 
-
-	//create a vector of vertices for the triangle
-	//vertices specified counter clockwise!
-
-
 	//you will use these
 	vec2 trans1(-1, 1);
 	vec2 trans2(1, 1);
@@ -205,25 +205,31 @@ int main(int argc, char *argv[]) {
 	vec2 accel(0, 1);
 
 	//loop through and produce more than on image - change to 30
-	for (int i=0; i < 3; i++) {
+	for (int i=0; i < 30; i++) {
 
-	  trans1 = trans1 + accel;
-	  trans2 = trans2 + accel;
-	  trans3 = trans3 + accel;
-
-	  //set up unique filename that conforms to processign movie maker
+	  //set up unique filename that conforms to processing movie maker
 	  outFilename.append(argv[3]);
 	  if (i < 10)
 		outFilename.append(to_string(0));
 		outFilename.append(to_string(i));
 		outFilename.append(".ppm");
+
+	  trans1 = trans1 + accel;
+	  trans2 = trans2 + accel;
+	  trans3 = trans3 + accel;
+
 		//open new file
 		outFile.open(outFilename);
 		if (outFile) {
 		  cout << "writing an image of size: " << sizeX << " " << sizeY << " to: " << argv[3] << endl;
 		  theWriter.writeHeader(outFile);
 		   //uncomment when task 4 is done
-		  /*for (auto s : theEllipses) {
+
+			blackBird.translate(trans1);
+			piggy.translate(trans2);
+
+		  /*
+			for (auto s : theEllipses) {
 		  	s->translate(trans1);
 		  }
 		  for (auto p : thePolys) {
