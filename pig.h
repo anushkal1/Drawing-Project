@@ -36,7 +36,7 @@ class Pig {
 
       for (auto obj : tail) {
   		  res = obj.eval(x, y);
-  		  if (res < 0 && obj.getDepth() > curDepth) {
+  		  if (res && obj.getDepth() > curDepth) {
   			inC = obj.getInC();
   			inTrue = true;
   			curDepth = obj.getDepth();
@@ -44,7 +44,7 @@ class Pig {
   		}
 
 
-      if (bodyRound.eval(x,y) < 1) {
+      if (bodyRound.eval(x,y) < 0) {
               inC = bodyRound.getInC();
               if (belly.eval(x,y)) {
                 inC = belly.getInC();
@@ -65,7 +65,7 @@ class Pig {
       curDepth = -1.0;
    		for (auto obj : eyebrows) {
    		  res = obj.eval(x, y);
-   		  if (res < 0 && obj.getDepth() > curDepth) {
+   		  if (res && obj.getDepth() > curDepth) {
    			inC = obj.getInC();
    			inTrue = true;
    			curDepth = obj.getDepth();

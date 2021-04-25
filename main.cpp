@@ -31,23 +31,31 @@ void writeOut(ostream& out, ppmR& theWriter, Bird blackBird) {
 	for (int y=0; y < theWriter.height; y++) {
 		for (int x =0; x < theWriter.width; x++) {
 			drawC = blackBird.eval(x, y, background);
+			theWriter.writePixel(out, x, y, drawC);
+		}
+			/*
 			if (drawC == background) {
 				//do nothing
 			} else {
 				inTrue = true;
 				inC = drawC;
 			}
+			*/
 
+			/*
 			inTrue = false;
 			curDepth = -1;
+			*/
 			//iterate through all possible equations (note 'front' determined by order in vector)
 
+			/*
 			if (inTrue) {
 				theWriter.writePixel(out, x, y, inC);
 			}
 			else
 				theWriter.writePixel(out, x, y, background);
 		}
+		*/
 		theWriter.writeNewLine(out);
 	}
 }
@@ -159,10 +167,10 @@ int main(int argc, char *argv[]) {
 
 	cout << "sizeX: " << sizeX << " sizeY: " << sizeY << endl;
 
-	
+
 	//create a vector of vertices for the triangle
 	//vertices specified counter clockwise!
-	
+
 
 	//you will use these
 	vec2 trans1(-1, 1);

@@ -80,7 +80,7 @@ class Bird {
    			inTrue = true;
    			curDepth = obj.getDepth();
    		  }
-   		 }
+      }
 
   		if (inTrue) {
   			return inC;
