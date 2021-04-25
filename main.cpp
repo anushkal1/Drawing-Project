@@ -115,6 +115,59 @@ int main(int argc, char *argv[]) {
 	niceC.push_back(color(239, 174, 115));
 	niceC.push_back(color(186, 140, 117));
 
+	ellipse blackBirdBody(vec2(30,30), vec2(20,20), 1.0, mainColors.find("black"));
+	vector<ellipse> blackBirdEyes;
+	blackBirdEyes.push_back(ellipse(vec2(20,20), vec2(5,6), 2.0, blackBirdColors.find("tinted black")));
+	blackBirdEyes.push_back(ellipse(vec2(40,20), vec2(5,6), 2.0, blackBirdColors.find("tinted black")));
+	blackBirdEyes.push_back(ellipse(vec2(20,20), vec2(4,4), 3.0, mainColors.find("white")));
+	blackBirdEyes.push_back(ellipse(vec2(40,20), vec2(4,4), 3.0, mainColors.find("white")));
+	blackBirdEyes.push_back(ellipse(vec2(20,20), vec2(2,2), 4.0, mainColors.find("black")));
+	blackBirdEyes.push_back(ellipse(vec2(40,20), vec2(2,2), 4.0, mainColors.find("black")));
+
+	vector<Polygon> blackBirdBeak, blackBirdTail, blackBirdEyebrows;
+	vector<vec2> blackBirdUpperBeak;
+	blackBirdUpperBeak.push_back(vec2(30, 25));
+	blackBirdUpperBeak.push_back(vec2(40, 27));
+	blackBirdUpperBeak.push_back(vec2(30, 30));
+
+	vector<vec2> blackBirdLowerBeak;
+	blackBirdLowerBeak.push_back(vec2(30, 32));
+	blackBirdLowerBeak.push_back(vec2(40, 34));
+	blackBirdLowerBeak.push_back(vec2(30, 37));
+	blackBirdBeak.push_back(blackBirdUpperBeak, 2.0, mainColors.find("beakColor"));
+	blackBirdBeak.push_back(blackBirdLowerBeak, 2.0, mainColors.find("beakColor"));
+
+	vector<vec2> blackBirdHair;
+	blackBirdHair.push_back(vec2(28,11));
+	blackBirdHair.push_back(vec2(27,5));
+	blackBirdHair.push_back(vec2(33,5));
+	blackBirdHair.push_back(vec2(32,11));
+
+	vector<vec2> blackBirdHairOrange;
+	blackBirdHair.push_back(vec2(27,5));
+	blackBirdHair.push_back(vec2(27,2));
+	blackBirdHair.push_back(vec2(33,2));
+	blackBirdHair.push_back(vec2(33,5));
+	blackBirdTail.push_back(blackBirdHair, 2.0, mainColors.find("black"));
+	blackBirdTail.push_back(blackBirdHair, 3.0, blackBirdColors.find("red"));
+
+	vector<vec2> blackBirdLEyebrow;
+	blackBirdHair.push_back(vec2(10,15));
+	blackBirdHair.push_back(vec2(12,11));
+	blackBirdHair.push_back(vec2(24,11));
+	blackBirdHair.push_back(vec2(22,15));
+
+	vector<vec2> blackBirdREyebrow;
+	blackBirdHair.push_back(vec2(38,15));
+	blackBirdHair.push_back(vec2(36,11));
+	blackBirdHair.push_back(vec2(48,11));
+	blackBirdHair.push_back(vec2(50,15));
+	blackBirdTail.push_back(blackBirdHair, 4.0, blackBirdColors.find("red"));
+	blackBirdTail.push_back(blackBirdHair, 4.0, blackBirdColors.find("red"));
+
+	ellipse blackBirdBelly(vec2(30, 40), vec2(8,8), 2.0, blackBirdColors.find("tinted black"));
+	Bird blackBird(blackBirdBody, blackBirdEyes, blackBirdBeak, blackBirdTail, blackBirdEyebrows, blackBirdBelly);
+
 	if (argc < 4) {
 		cerr << "Error format: a.out sizeX sizeY outfileName" << endl;
 		exit(0);
