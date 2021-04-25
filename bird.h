@@ -98,14 +98,14 @@ class Bird {
       for (ellipse & e : eyes) {
         e.translate(offset);
       }
-      for (Polygon & p : beak) {
-        p.translate(offset);
+      for (Polygon & b : beak) {
+        b.translate(offset);
       }
-      for (Polygon & p : tail) {
-        p.translate(offset);
+      for (Polygon & t : tail) {
+        t.translate(offset);
       }
-      for (Polygon & p : eyebrows) {
-        p.translate(offset);
+      for (Polygon & e : eyebrows) {
+        e.translate(offset);
       }
       belly.translate(offset); // does this need & ?
 
