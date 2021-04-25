@@ -13,16 +13,14 @@
 
 class Pig {
     public:
-    Pig(ellipse& body, std::vector<ellipse>& e, std::vector<ellipse>& b,
-      std::vector<Polygon>& t, std::vector<Polygon>& eb, ellipse& bell):
-      bodyRound(body), eyes(e), snout(b), tail(t), eyebrows(eb), belly(bell) {}
+    Pig(ellipse& body, std::vector<ellipse>& ey, std::vector<ellipse>& b,
+      std::vector<ellipse>& ear):
+      bodyRound(body), eyes(ey), snout(b), ears(ear) {}
 
     ellipse& getBodyE() { return bodyRound; }
     std::vector<ellipse>& getEyes() { return eyes; }
     std::vector<ellipse>& getSnout() { return snout; }
-    std::vector<Polygon>& getTail() { return tail; }
-    std::vector<Polygon>& getEyebrows() { return eyebrows; }
-    ellipse& getBelly() { return belly; }
+    std::vector<ellipse>& getEars() { return ears; }
 
     color eval(int x, int y, color background) {
 
@@ -30,63 +28,61 @@ class Pig {
       // but afaik can't really do anything about it bc of the type differences
 
       float res;
-  		color inC;
-  		bool inTrue = false;
-  		double curDepth = -1.0;
-
-      for (auto obj : tail) {
-  		  res = obj.eval(x, y);
-  		  if (res && obj.getDepth() > curDepth) {
-  			inC = obj.getInC();
-  			inTrue = true;
-  			curDepth = obj.getDepth();
-  		  }
-  		}
+      color inC;
+      bool inTrue = false;
+      double curDepth = -1.0;
 
 
       if (bodyRound.eval(x,y) < 0) {
               inC = bodyRound.getInC();
-              if (belly.eval(x,y)) {
-                inC = belly.getInC();
-              }
               inTrue = true;
       }
 
       curDepth = -1.0;
-  		for (auto obj : eyes) {
-  		  res = obj.eval(x, y);
-  		  if (res < 0 && obj.getDepth() > curDepth) {
-  			inC = obj.getInC();
-  			inTrue = true;
-  			curDepth = obj.getDepth();
-  		  }
-  		 }
+      for (auto obj : eyes) {
+        res = obj.eval(x, y);
+        if (res < 0 && obj.getDepth() > curDepth) {
+        inC = obj.getInC();
+        inTrue = true;
+        curDepth = obj.getDepth();
+        }
+       }
 
       curDepth = -1.0;
-   		for (auto obj : eyebrows) {
-   		  res = obj.eval(x, y);
-   		  if (res && obj.getDepth() > curDepth) {
-   			inC = obj.getInC();
-   			inTrue = true;
-   			curDepth = obj.getDepth();
-   		  }
-   		 }
+      for (auto obj : snout) {
+        res = obj.eval(x, y);
+        if (res < 0 && obj.getDepth() > curDepth) {
+        inC = obj.getInC();
+        inTrue = true;
+        curDepth = obj.getDepth();
+        }
+       }
 
       curDepth = -1.0;
-   		for (auto obj : snout) {
-   		  res = obj.eval(x, y);
-   		  if (res < 0 && obj.getDepth() > curDepth) {
-   			inC = obj.getInC();
-   			inTrue = true;
-   			curDepth = obj.getDepth();
-   		  }
-   		 }
+      for (auto obj : ears) {
+        res = obj.eval(x, y);
+        if (res < 0 && obj.getDepth() > curDepth) {
+        inC = obj.getInC();
+        inTrue = true;
+        curDepth = obj.getDepth();
+        }
+       }
 
-  		if (inTrue) {
-  			return inC;
-  		}
-  		else
-  			return background;
+    // curDepth = -1.0;
+      // for (auto obj : eyebrows) {
+      //   res = obj.eval(x, y);
+      //   if (res && obj.getDepth() > curDepth) {
+      //   inC = obj.getInC();
+      //   inTrue = true;
+      //   curDepth = obj.getDepth();
+      //   }
+      //  }
+
+      if (inTrue) {
+        return inC;
+      }
+      else
+        return background;
 
     }
 
@@ -101,13 +97,12 @@ class Pig {
       for (ellipse & s : snout) {
         s.translate(offset);
       }
-      for (Polygon & t : tail) {
+      for (ellipse & t : ears) {
         t.translate(offset);
       }
-      for (Polygon & e : eyebrows) {
-        e.translate(offset);
-      }
-      belly.translate(offset); // does this need & ?
+      // for (Polygon & e : eyebrows) {
+      //   e.translate(offset);
+      // }
 
       return;
     }
@@ -118,10 +113,8 @@ class Pig {
         ellipse& bodyRound;
         std::vector<ellipse>& eyes;
         std::vector<ellipse>& snout;
-        std::vector<Polygon>& tail;
-        std::vector<Polygon>& eyebrows;
-        ellipse& belly;
-
+        std::vector<ellipse>& ears;
+        // std::vector<Polygon>& eyebrows;
 };
 
 
