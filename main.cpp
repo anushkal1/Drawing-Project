@@ -18,10 +18,7 @@ using namespace std;
 /*write out PPM data, using the defined implicit equation
   interior points write a different color then exterior points */
 
-void writeOut(ostream& out, ppmR& theWriter,
-				vector<shared_ptr<ellipse>> IEs,
-				vector<shared_ptr<Rect> > Rs,
-				vector<shared_ptr<Polygon> > Ps) {
+void writeOut(ostream& out, ppmR& theWriter, Bird blackBird) {
 
 	float res;
 	color inC;
@@ -33,35 +30,17 @@ void writeOut(ostream& out, ppmR& theWriter,
 	//for every point in the 2D space
 	for (int y=0; y < theWriter.height; y++) {
 		for (int x =0; x < theWriter.width; x++) {
+			drawC = blackBird.eval(x, y, background);
+			if (drawC == background) {
+				//do nothing
+			} else {
+				inTrue = true;
+				inC = drawC;
+			}
 
 			inTrue = false;
 			curDepth = -1;
 			//iterate through all possible equations (note 'front' determined by order in vector)
-
-			for (auto eq : IEs) {
-				res = eq->eval(x, y);
-				if (res < 0 && eq->getDepth() > curDepth) {
-					inC = eq->getInC();
-					inTrue = true;
-					curDepth = eq->getDepth();
-				}
-			}
-
-			for (auto rect: Rs) {
-				if (rect->evalIn(x, y) && rect->getDepth() > curDepth){
-					inC = rect->getInC();
-					inTrue = true;
-					curDepth = rect->getDepth();
-				}
-			}
-
-			for (auto poly:Ps) {
-				if (poly->eval(x, y) && poly->getDepth() > curDepth){
-					inC = poly->getInC();
-					inTrue = true;
-					curDepth = poly->getDepth();
-				}
-			}
 
 			if (inTrue) {
 				theWriter.writePixel(out, x, y, inC);
@@ -104,10 +83,8 @@ int main(int argc, char *argv[]) {
 	ofstream outFile;
 	int sizeX, sizeY;
 
-	Bird redBird = Bird();
-	vector<shared_ptr<ellipse>> theEllipses;
-	vector<shared_ptr<Rect>> theRects;
-	vector<shared_ptr<Polygon>> thePolys;
+
+
 	vector<color> niceC;
 	niceC.push_back(color(117, 119, 186));
 	niceC.push_back(color(45, 47, 135));
@@ -115,16 +92,18 @@ int main(int argc, char *argv[]) {
 	niceC.push_back(color(239, 174, 115));
 	niceC.push_back(color(186, 140, 117));
 
-	ellipse blackBirdBody(vec2(30,30), vec2(20,20), 1.0, mainColors.find("black"));
+	ellipse blackBirdBody(vec2(30,30), vec2(20,20), 1.0, mainColors["black"]);
 	vector<ellipse> blackBirdEyes;
-	blackBirdEyes.push_back(ellipse(vec2(20,20), vec2(5,6), 2.0, blackBirdColors.find("tinted black")));
-	blackBirdEyes.push_back(ellipse(vec2(40,20), vec2(5,6), 2.0, blackBirdColors.find("tinted black")));
-	blackBirdEyes.push_back(ellipse(vec2(20,20), vec2(4,4), 3.0, mainColors.find("white")));
-	blackBirdEyes.push_back(ellipse(vec2(40,20), vec2(4,4), 3.0, mainColors.find("white")));
-	blackBirdEyes.push_back(ellipse(vec2(20,20), vec2(2,2), 4.0, mainColors.find("black")));
-	blackBirdEyes.push_back(ellipse(vec2(40,20), vec2(2,2), 4.0, mainColors.find("black")));
+	blackBirdEyes.push_back(ellipse(vec2(20,20), vec2(5,6), 2.0, blackBirdColors["tinted black"]));
+	blackBirdEyes.push_back(ellipse(vec2(40,20), vec2(5,6), 2.0, blackBirdColors["tinted black"]));
+	blackBirdEyes.push_back(ellipse(vec2(20,20), vec2(4,4), 3.0, mainColors["white"]));
+	blackBirdEyes.push_back(ellipse(vec2(40,20), vec2(4,4), 3.0, mainColors["white"]));
+	blackBirdEyes.push_back(ellipse(vec2(20,20), vec2(2,2), 4.0, mainColors["black"]));
+	blackBirdEyes.push_back(ellipse(vec2(40,20), vec2(2,2), 4.0, mainColors["black"]));
 
-	vector<Polygon> blackBirdBeak, blackBirdTail, blackBirdEyebrows;
+	vector<Polygon> blackBirdBeak;
+	vector<Polygon> blackBirdTail;
+	vector<Polygon> blackBirdEyebrows;
 	vector<vec2> blackBirdUpperBeak;
 	blackBirdUpperBeak.push_back(vec2(30, 25));
 	blackBirdUpperBeak.push_back(vec2(40, 27));
@@ -134,8 +113,8 @@ int main(int argc, char *argv[]) {
 	blackBirdLowerBeak.push_back(vec2(30, 32));
 	blackBirdLowerBeak.push_back(vec2(40, 34));
 	blackBirdLowerBeak.push_back(vec2(30, 37));
-	blackBirdBeak.push_back(blackBirdUpperBeak, 2.0, mainColors.find("beakColor"));
-	blackBirdBeak.push_back(blackBirdLowerBeak, 2.0, mainColors.find("beakColor"));
+	blackBirdBeak.push_back(Polygon(blackBirdUpperBeak, 2.0, mainColors["beakColor"]));
+	blackBirdBeak.push_back(Polygon(blackBirdLowerBeak, 2.0, mainColors["beakColor"]));
 
 	vector<vec2> blackBirdHair;
 	blackBirdHair.push_back(vec2(28,11));
@@ -148,8 +127,8 @@ int main(int argc, char *argv[]) {
 	blackBirdHair.push_back(vec2(27,2));
 	blackBirdHair.push_back(vec2(33,2));
 	blackBirdHair.push_back(vec2(33,5));
-	blackBirdTail.push_back(blackBirdHair, 2.0, mainColors.find("black"));
-	blackBirdTail.push_back(blackBirdHair, 3.0, blackBirdColors.find("red"));
+	blackBirdTail.push_back(Polygon(blackBirdHair, 2.0, mainColors["black"]));
+	blackBirdTail.push_back(Polygon(blackBirdHair, 3.0, blackBirdColors["red"]));
 
 	vector<vec2> blackBirdLEyebrow;
 	blackBirdHair.push_back(vec2(10,15));
@@ -162,10 +141,10 @@ int main(int argc, char *argv[]) {
 	blackBirdHair.push_back(vec2(36,11));
 	blackBirdHair.push_back(vec2(48,11));
 	blackBirdHair.push_back(vec2(50,15));
-	blackBirdTail.push_back(blackBirdHair, 4.0, blackBirdColors.find("red"));
-	blackBirdTail.push_back(blackBirdHair, 4.0, blackBirdColors.find("red"));
+	blackBirdTail.push_back(Polygon(blackBirdHair, 4.0, blackBirdColors["red"]));
+	blackBirdTail.push_back(Polygon(blackBirdHair, 4.0, blackBirdColors["red"]));
 
-	ellipse blackBirdBelly(vec2(30, 40), vec2(8,8), 2.0, blackBirdColors.find("tinted black"));
+	ellipse blackBirdBelly(vec2(30, 40), vec2(8,8), 2.0, blackBirdColors["tinted black"]);
 	Bird blackBird(blackBirdBody, blackBirdEyes, blackBirdBeak, blackBirdTail, blackBirdEyebrows, blackBirdBelly);
 
 	if (argc < 4) {
@@ -180,43 +159,10 @@ int main(int argc, char *argv[]) {
 
 	cout << "sizeX: " << sizeX << " sizeY: " << sizeY << endl;
 
-	for (int j=0; j < 15; j++) {
-		theEllipses.push_back(make_shared<ellipse>(vec2(nicerRand(10, sizeX-10), nicerRand(10, sizeX-10)),
-								vec2(nicerRand(11, 20), nicerRand(11, 20)), nicerRand(1, 3), niceC[nicerRand(0,5)]));
-	}
-
-	for (int i=0; i < 5; i++) {
-		theRects.push_back(make_shared<Rect>(vec2(nicerRand(10, sizeX-10), nicerRand(10, sizeX-10)),
-				nicerRand(8, 23), nicerRand(7, 22), color(nicerRand(23, 210)), nicerRand(1, 3)));
-	}
-
+	
 	//create a vector of vertices for the triangle
 	//vertices specified counter clockwise!
-	vector<vec2> triVerts;
-	triVerts.push_back(vec2(100, 50));
-	triVerts.push_back(vec2(150, 10));
-	triVerts.push_back(vec2(205, 50));
-
-	thePolys.push_back(make_shared<Polygon>(triVerts, 5, color(252)) );
-
-
-	vector<vec2> newTriVerts;
-	newTriVerts.push_back(vec2(100, 100));
-	newTriVerts.push_back(vec2(200, 100));
-	newTriVerts.push_back(vec2(150, 50));
-
-	thePolys.push_back(make_shared<Polygon>(newTriVerts, 5, color(252)) );
-
-
-
-	vector<vec2> houseVerts;
-	houseVerts.push_back(vec2(100, 100));
-	houseVerts.push_back(vec2(150, 60));
-	houseVerts.push_back(vec2(205, 100));
-	houseVerts.push_back(vec2(210, 270));
-	houseVerts.push_back(vec2(105, 271));
-
-	thePolys.push_back(make_shared<Polygon>(houseVerts, 5, niceC[0]) );
+	
 
 	//you will use these
 	vec2 trans1(-1, 1);
@@ -243,7 +189,7 @@ int main(int argc, char *argv[]) {
 		  cout << "writing an image of size: " << sizeX << " " << sizeY << " to: " << argv[3] << endl;
 		  theWriter.writeHeader(outFile);
 		   //uncomment when task 4 is done
-		  for (auto s : theEllipses) {
+		  /*for (auto s : theEllipses) {
 		  	s->translate(trans1);
 		  }
 		  for (auto p : thePolys) {
@@ -252,8 +198,9 @@ int main(int argc, char *argv[]) {
 		  for (auto r : theRects) {
 		  	r->translate(trans2);
 		  }
+		  */
 
-		  writeOut(outFile, theWriter, theEllipses, theRects, thePolys);
+		  writeOut(outFile, theWriter, blackBird);
 		  outFile.close();
 		  outFilename.erase();
 		} else {
