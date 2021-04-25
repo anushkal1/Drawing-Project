@@ -14,13 +14,14 @@
 class Pig {
     public:
     Pig(ellipse& body, std::vector<ellipse>& ey, std::vector<ellipse>& b,
-      std::vector<ellipse>& ear):
-      bodyRound(body), eyes(ey), snout(b), ears(ear) {}
+      std::vector<ellipse>& ear, std::vector<Polygon>& eb):
+      bodyRound(body), eyes(ey), snout(b), ears(ear), eyebrows(eb) {}
 
     ellipse& getBodyE() { return bodyRound; }
     std::vector<ellipse>& getEyes() { return eyes; }
     std::vector<ellipse>& getSnout() { return snout; }
     std::vector<ellipse>& getEars() { return ears; }
+    std::vector<Polygon>& getEyebrows() { return eyebrows; }
 
     color eval(int x, int y, color background) {
 
@@ -68,15 +69,15 @@ class Pig {
         }
        }
 
-    // curDepth = -1.0;
-      // for (auto obj : eyebrows) {
-      //   res = obj.eval(x, y);
-      //   if (res && obj.getDepth() > curDepth) {
-      //   inC = obj.getInC();
-      //   inTrue = true;
-      //   curDepth = obj.getDepth();
-      //   }
-      //  }
+      curDepth = -1.0;
+      for (auto obj : eyebrows) {
+        res = obj.eval(x, y);
+        if (res && obj.getDepth() > curDepth) {
+        inC = obj.getInC();
+        inTrue = true;
+        curDepth = obj.getDepth();
+        }
+       }
 
       if (inTrue) {
         return inC;
@@ -100,9 +101,9 @@ class Pig {
       for (ellipse & t : ears) {
         t.translate(offset);
       }
-      // for (Polygon & e : eyebrows) {
-      //   e.translate(offset);
-      // }
+      for (Polygon & e : eyebrows) {
+        e.translate(offset);
+      }
 
       return;
     }
@@ -114,7 +115,7 @@ class Pig {
         std::vector<ellipse>& eyes;
         std::vector<ellipse>& snout;
         std::vector<ellipse>& ears;
-        // std::vector<Polygon>& eyebrows;
+        std::vector<Polygon>& eyebrows;
 };
 
 
