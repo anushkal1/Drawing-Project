@@ -18,7 +18,7 @@ using namespace std;
 /*write out PPM data, using the defined implicit equation
   interior points write a different color then exterior points */
 
-void writeOut(ostream& out, ppmR& theWriter, Bird blackBird) {
+void writeOut(ostream& out, ppmR& theWriter, Bird blackBird, Pig piggy) {
 
 	float res;
 	color inC;
@@ -31,6 +31,8 @@ void writeOut(ostream& out, ppmR& theWriter, Bird blackBird) {
 	for (int y=0; y < theWriter.height; y++) {
 		for (int x =0; x < theWriter.width; x++) {
 			drawC = blackBird.eval(x, y, background);
+			theWriter.writePixel(out, x, y, drawC);
+			drawC = piggy.eval(x, y, background);
 			theWriter.writePixel(out, x, y, drawC);
 		}
 			/*
@@ -83,10 +85,10 @@ int main(int argc, char *argv[]) {
 	blackBirdColors["tinted black"] = color(68, 68, 68);
 	blackBirdColors["red"] = color(198, 68, 0);
 
-	unordered_map<string, color> birdColors;
-	birdColors["green"] = color(13, 186, 22);
-	birdColors["outlined green"] = color(5, 132, 12);
-	birdColors["dark green"] = color(38, 115, 42);
+	unordered_map<string, color> pigColors;
+	pigColors["green"] = color(13, 186, 22);
+	pigColors["outlined green"] = color(5, 132, 12);
+	pigColors["dark green"] = color(38, 115, 42);
 
 	ofstream outFile;
 	int sizeX, sizeY;
@@ -155,6 +157,30 @@ int main(int argc, char *argv[]) {
 	ellipse blackBirdBelly(vec2(30, 40), vec2(8,8), 2.0, blackBirdColors["tinted black"]);
 	Bird blackBird(blackBirdBody, blackBirdEyes, blackBirdBeak, blackBirdTail, blackBirdEyebrows, blackBirdBelly);
 
+	// CREATING PIG
+	ellipse pigBody(vec2(150,150), vec2(120,80), 1, pigColors["green"]);
+	vector<ellipse> pigEyes;
+	pigEyes.push_back(ellipse(vec2(210,140), vec2(20,20), 2, mainColors["white"]));
+	pigEyes.push_back(ellipse(vec2(90,140), vec2(20,20), 2, mainColors["white"]));
+	pigEyes.push_back(ellipse(vec2(220,140), vec2(8,8), 3, mainColors["black"]));
+	pigEyes.push_back(ellipse(vec2(80,140), vec2(8,8), 3, mainColors["black"]));
+
+	vector<ellipse> pigSnout;
+	pigSnout.push_back(ellipse(vec2(150,160), vec2(38,28), 2, pigColors["outlined green"]));
+	pigSnout.push_back(ellipse(vec2(150,160), vec2(35,25), 3, pigColors["green"]));
+	pigSnout.push_back(ellipse(vec2(130,160), vec2(8,12), 4, mainColors["black"]));
+	pigSnout.push_back(ellipse(vec2(170,160), vec2(8,8), 4, mainColors["black"]));
+
+	vector<ellipse> pigEars;
+	pigEars.push_back(ellipse(vec2(100,75), vec2(20,20), 2, pigColors["green"]));
+	pigEars.push_back(ellipse(vec2(200,75), vec2(20,20), 2, pigColors["green"]));
+	pigEars.push_back(ellipse(vec2(100,75), vec2(12,12), 3, pigColors["outlined green"]));
+	pigEars.push_back(ellipse(vec2(200,75), vec2(12,12), 3, pigColors["outlined green"]));
+
+	Pig piggy(pigBody, pigEyes, pigSnout, pigEars);
+
+
+
 	if (argc < 4) {
 		cerr << "Error format: a.out sizeX sizeY outfileName" << endl;
 		exit(0);
@@ -208,7 +234,7 @@ int main(int argc, char *argv[]) {
 		  }
 		  */
 
-		  writeOut(outFile, theWriter, blackBird);
+		  writeOut(outFile, theWriter, blackBird, piggy);
 		  outFile.close();
 		  outFilename.erase();
 		} else {
