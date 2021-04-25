@@ -18,7 +18,7 @@ using namespace std;
 /*write out PPM data, using the defined implicit equation
   interior points write a different color then exterior points */
 
-void writeOut(ostream& out, ppmR& theWriter, Bird blackBird, Pig piggy) {
+void writeOut(ostream& out, ppmR& theWriter, Bird blackBird) {
 
 	float res;
 	color inC;
@@ -31,8 +31,6 @@ void writeOut(ostream& out, ppmR& theWriter, Bird blackBird, Pig piggy) {
 	for (int y=0; y < theWriter.height; y++) {
 		for (int x =0; x < theWriter.width; x++) {
 			drawC = blackBird.eval(x, y, background);
-			theWriter.writePixel(out, x, y, drawC);
-			drawC = piggy.eval(x, y, background);
 			theWriter.writePixel(out, x, y, drawC);
 		}
 			/*
@@ -85,115 +83,77 @@ int main(int argc, char *argv[]) {
 	blackBirdColors["tinted black"] = color(68, 68, 68);
 	blackBirdColors["red"] = color(198, 68, 0);
 
-	unordered_map<string, color> pigColors;
-	pigColors["green"] = color(13, 186, 22);
-	pigColors["outlined green"] = color(5, 132, 12);
-	pigColors["dark green"] = color(38, 115, 42);
+	unordered_map<string, color> birdColors;
+	birdColors["green"] = color(13, 186, 22);
+	birdColors["outlined green"] = color(5, 132, 12);
+	birdColors["dark green"] = color(38, 115, 42);
 
 	ofstream outFile;
 	int sizeX, sizeY;
 
-	vector<color> niceC;
-	niceC.push_back(color(117, 119, 186));
-	niceC.push_back(color(45, 47, 135));
-	niceC.push_back(color(174, 209, 238));
-	niceC.push_back(color(239, 174, 115));
-	niceC.push_back(color(186, 140, 117));
 
-	ellipse blackBirdBody(vec2(30,30), vec2(20,20), 1.0, mainColors["black"]);
+
+	// vector<color> niceC;
+	// niceC.push_back(color(117, 119, 186));
+	// niceC.push_back(color(45, 47, 135));
+	// niceC.push_back(color(174, 209, 238));
+	// niceC.push_back(color(239, 174, 115));
+	// niceC.push_back(color(186, 140, 117));
+
+	ellipse blackBirdBody(vec2(300,300), vec2(100,100), 1.0, mainColors["black"]);
 	vector<ellipse> blackBirdEyes;
-	blackBirdEyes.push_back(ellipse(vec2(20,20), vec2(5,6), 2.0, blackBirdColors["tinted black"]));
-	blackBirdEyes.push_back(ellipse(vec2(40,20), vec2(5,6), 2.0, blackBirdColors["tinted black"]));
-	blackBirdEyes.push_back(ellipse(vec2(20,20), vec2(4,4), 3.0, mainColors["white"]));
-	blackBirdEyes.push_back(ellipse(vec2(40,20), vec2(4,4), 3.0, mainColors["white"]));
-	blackBirdEyes.push_back(ellipse(vec2(20,20), vec2(2,2), 4.0, mainColors["black"]));
-	blackBirdEyes.push_back(ellipse(vec2(40,20), vec2(2,2), 4.0, mainColors["black"]));
+	blackBirdEyes.push_back(ellipse(vec2(200,200), vec2(50,60), 2.0, blackBirdColors["tinted black"]));
+	blackBirdEyes.push_back(ellipse(vec2(400,200), vec2(50,60), 2.0, blackBirdColors["tinted black"]));
+	blackBirdEyes.push_back(ellipse(vec2(200,200), vec2(40,40), 3.0, mainColors["white"]));
+	blackBirdEyes.push_back(ellipse(vec2(400,200), vec2(40,40), 3.0, mainColors["white"]));
+	blackBirdEyes.push_back(ellipse(vec2(200,200), vec2(20,20), 4.0, mainColors["black"]));
+	blackBirdEyes.push_back(ellipse(vec2(400,200), vec2(20,20), 4.0, mainColors["black"]));
 
 	vector<Polygon> blackBirdBeak;
 	vector<Polygon> blackBirdTail;
 	vector<Polygon> blackBirdEyebrows;
 	vector<vec2> blackBirdUpperBeak;
-	blackBirdUpperBeak.push_back(vec2(30, 25));
-	blackBirdUpperBeak.push_back(vec2(40, 27));
-	blackBirdUpperBeak.push_back(vec2(30, 30));
+	blackBirdUpperBeak.push_back(vec2(300, 250));
+	blackBirdUpperBeak.push_back(vec2(400, 270));
+	blackBirdUpperBeak.push_back(vec2(300, 300));
 
 	vector<vec2> blackBirdLowerBeak;
-	blackBirdLowerBeak.push_back(vec2(30, 32));
-	blackBirdLowerBeak.push_back(vec2(40, 34));
-	blackBirdLowerBeak.push_back(vec2(30, 37));
+	blackBirdLowerBeak.push_back(vec2(300, 320));
+	blackBirdLowerBeak.push_back(vec2(400, 340));
+	blackBirdLowerBeak.push_back(vec2(300, 370));
 	blackBirdBeak.push_back(Polygon(blackBirdUpperBeak, 2.0, mainColors["beakColor"]));
 	blackBirdBeak.push_back(Polygon(blackBirdLowerBeak, 2.0, mainColors["beakColor"]));
 
 	vector<vec2> blackBirdHair;
-	blackBirdHair.push_back(vec2(28,11));
-	blackBirdHair.push_back(vec2(27,5));
-	blackBirdHair.push_back(vec2(33,5));
-	blackBirdHair.push_back(vec2(32,11));
+	blackBirdHair.push_back(vec2(280,110));
+	blackBirdHair.push_back(vec2(270,50));
+	blackBirdHair.push_back(vec2(330,50));
+	blackBirdHair.push_back(vec2(320,110));
 
 	vector<vec2> blackBirdHairOrange;
-	blackBirdHair.push_back(vec2(27,5));
-	blackBirdHair.push_back(vec2(27,2));
-	blackBirdHair.push_back(vec2(33,2));
-	blackBirdHair.push_back(vec2(33,5));
+	blackBirdHair.push_back(vec2(270,50));
+	blackBirdHair.push_back(vec2(270,20));
+	blackBirdHair.push_back(vec2(330,20));
+	blackBirdHair.push_back(vec2(330,50));
 	blackBirdTail.push_back(Polygon(blackBirdHair, 2.0, mainColors["black"]));
 	blackBirdTail.push_back(Polygon(blackBirdHair, 3.0, blackBirdColors["red"]));
 
 	vector<vec2> blackBirdLEyebrow;
-	blackBirdHair.push_back(vec2(10,15));
-	blackBirdHair.push_back(vec2(12,11));
-	blackBirdHair.push_back(vec2(24,11));
-	blackBirdHair.push_back(vec2(22,15));
+	blackBirdHair.push_back(vec2(100,150));
+	blackBirdHair.push_back(vec2(120,110));
+	blackBirdHair.push_back(vec2(240,110));
+	blackBirdHair.push_back(vec2(220,150));
 
 	vector<vec2> blackBirdREyebrow;
-	blackBirdHair.push_back(vec2(38,15));
-	blackBirdHair.push_back(vec2(36,11));
-	blackBirdHair.push_back(vec2(48,11));
-	blackBirdHair.push_back(vec2(50,15));
+	blackBirdHair.push_back(vec2(380,150));
+	blackBirdHair.push_back(vec2(360,110));
+	blackBirdHair.push_back(vec2(480,110));
+	blackBirdHair.push_back(vec2(500,150));
 	blackBirdTail.push_back(Polygon(blackBirdHair, 4.0, blackBirdColors["red"]));
 	blackBirdTail.push_back(Polygon(blackBirdHair, 4.0, blackBirdColors["red"]));
 
-	ellipse blackBirdBelly(vec2(30, 40), vec2(8,8), 2.0, blackBirdColors["tinted black"]);
+	ellipse blackBirdBelly(vec2(300, 400), vec2(80,80), 2.0, blackBirdColors["tinted black"]);
 	Bird blackBird(blackBirdBody, blackBirdEyes, blackBirdBeak, blackBirdTail, blackBirdEyebrows, blackBirdBelly);
-
-	// CREATING PIG
-	ellipse pigBody(vec2(450,150), vec2(120,80), 1, pigColors["green"]);
-	vector<ellipse> pigEyes;
-	pigEyes.push_back(ellipse(vec2(510,140), vec2(23,23), 1, pigColors["outlined green"]));
-	pigEyes.push_back(ellipse(vec2(510,140), vec2(20,20), 2, mainColors["white"]));
-	pigEyes.push_back(ellipse(vec2(390,140), vec2(23,23), 1, pigColors["outlined green"]));
-	pigEyes.push_back(ellipse(vec2(390,140), vec2(20,20), 2, mainColors["white"]));
-	pigEyes.push_back(ellipse(vec2(520,140), vec2(8,8), 3, mainColors["black"]));
-	pigEyes.push_back(ellipse(vec2(380,140), vec2(8,8), 3, mainColors["black"]));
-
-	vector<ellipse> pigSnout;
-	pigSnout.push_back(ellipse(vec2(450,160), vec2(38,33), 2, pigColors["outlined green"]));
-	pigSnout.push_back(ellipse(vec2(450,160), vec2(35,30), 3, pigColors["green"]));
-	pigSnout.push_back(ellipse(vec2(435,160), vec2(8,11), 4, mainColors["black"]));
-	pigSnout.push_back(ellipse(vec2(465,160), vec2(8,8), 4, mainColors["black"]));
-
-	vector<ellipse> pigEars;
-	pigEars.push_back(ellipse(vec2(400,75), vec2(20,20), 2, pigColors["green"]));
-	pigEars.push_back(ellipse(vec2(500,75), vec2(20,20), 2, pigColors["green"]));
-	pigEars.push_back(ellipse(vec2(400,75), vec2(12,12), 3, pigColors["outlined green"]));
-	pigEars.push_back(ellipse(vec2(500,75), vec2(12,12), 3, pigColors["outlined green"]));
-
-	vector<Polygon> pigEyebrows;
-	vector<vec2> pigLEyebrow;
-	pigLEyebrow.push_back(vec2(420,100));
-	pigLEyebrow.push_back(vec2(420,110));
-	pigLEyebrow.push_back(vec2(370,115));
-	pigLEyebrow.push_back(vec2(370,110));
-
-	vector<vec2> pigREyebrow;
-	pigREyebrow.push_back(vec2(490,100));
-	pigREyebrow.push_back(vec2(540,110));
-	pigREyebrow.push_back(vec2(540,115));
-	pigREyebrow.push_back(vec2(490,110));
-
-	pigEyebrows.push_back(Polygon(pigLEyebrow, 3, pigColors["dark green"]));
-	pigEyebrows.push_back(Polygon(pigREyebrow, 3, pigColors["dark green"]));
-
-	Pig piggy(pigBody, pigEyes, pigSnout, pigEars, pigEyebrows);
 
 	if (argc < 4) {
 		cerr << "Error format: a.out sizeX sizeY outfileName" << endl;
@@ -206,6 +166,11 @@ int main(int argc, char *argv[]) {
 	ppmR theWriter(sizeX, sizeY);
 
 	cout << "sizeX: " << sizeX << " sizeY: " << sizeY << endl;
+
+
+	//create a vector of vertices for the triangle
+	//vertices specified counter clockwise!
+
 
 	//you will use these
 	vec2 trans1(-1, 1);
@@ -243,7 +208,7 @@ int main(int argc, char *argv[]) {
 		  }
 		  */
 
-		  writeOut(outFile, theWriter, blackBird, piggy);
+		  writeOut(outFile, theWriter, blackBird);
 		  outFile.close();
 		  outFilename.erase();
 		} else {

@@ -93,7 +93,7 @@ class Bird {
     void translate(vec2 offset) {
 
 
-          bodyRound.translate(offset); // does this need & ?
+      bodyRound.translate(offset); // does this need & ?
 
       for (ellipse & e : eyes) {
         e.translate(offset);

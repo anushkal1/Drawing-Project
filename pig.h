@@ -13,15 +13,16 @@
 
 class Pig {
     public:
-    Pig(ellipse& body, std::vector<ellipse>& ey, std::vector<ellipse>& b,
-      std::vector<ellipse>& ear, std::vector<Polygon>& eb):
-      bodyRound(body), eyes(ey), snout(b), ears(ear), eyebrows(eb) {}
+    Pig(ellipse& body, std::vector<ellipse>& e, std::vector<ellipse>& b,
+      std::vector<Polygon>& t, std::vector<Polygon>& eb, ellipse& bell):
+      bodyRound(body), eyes(e), snout(b), tail(t), eyebrows(eb), belly(bell) {}
 
     ellipse& getBodyE() { return bodyRound; }
     std::vector<ellipse>& getEyes() { return eyes; }
     std::vector<ellipse>& getSnout() { return snout; }
-    std::vector<ellipse>& getEars() { return ears; }
+    std::vector<Polygon>& getTail() { return tail; }
     std::vector<Polygon>& getEyebrows() { return eyebrows; }
+    ellipse& getBelly() { return belly; }
 
     color eval(int x, int y, color background) {
 
@@ -29,61 +30,63 @@ class Pig {
       // but afaik can't really do anything about it bc of the type differences
 
       float res;
-      color inC;
-      bool inTrue = false;
-      double curDepth = -1.0;
+  		color inC;
+  		bool inTrue = false;
+  		double curDepth = -1.0;
+
+      for (auto obj : tail) {
+  		  res = obj.eval(x, y);
+  		  if (res && obj.getDepth() > curDepth) {
+  			inC = obj.getInC();
+  			inTrue = true;
+  			curDepth = obj.getDepth();
+  		  }
+  		}
 
 
       if (bodyRound.eval(x,y) < 0) {
               inC = bodyRound.getInC();
+              if (belly.eval(x,y)) {
+                inC = belly.getInC();
+              }
               inTrue = true;
       }
 
       curDepth = -1.0;
-      for (auto obj : eyes) {
-        res = obj.eval(x, y);
-        if (res < 0 && obj.getDepth() > curDepth) {
-        inC = obj.getInC();
-        inTrue = true;
-        curDepth = obj.getDepth();
-        }
-       }
+  		for (auto obj : eyes) {
+  		  res = obj.eval(x, y);
+  		  if (res < 0 && obj.getDepth() > curDepth) {
+  			inC = obj.getInC();
+  			inTrue = true;
+  			curDepth = obj.getDepth();
+  		  }
+  		 }
 
       curDepth = -1.0;
-      for (auto obj : snout) {
-        res = obj.eval(x, y);
-        if (res < 0 && obj.getDepth() > curDepth) {
-        inC = obj.getInC();
-        inTrue = true;
-        curDepth = obj.getDepth();
-        }
-       }
+   		for (auto obj : eyebrows) {
+   		  res = obj.eval(x, y);
+   		  if (res && obj.getDepth() > curDepth) {
+   			inC = obj.getInC();
+   			inTrue = true;
+   			curDepth = obj.getDepth();
+   		  }
+   		 }
 
       curDepth = -1.0;
-      for (auto obj : ears) {
-        res = obj.eval(x, y);
-        if (res < 0 && obj.getDepth() > curDepth) {
-        inC = obj.getInC();
-        inTrue = true;
-        curDepth = obj.getDepth();
-        }
-       }
+   		for (auto obj : snout) {
+   		  res = obj.eval(x, y);
+   		  if (res < 0 && obj.getDepth() > curDepth) {
+   			inC = obj.getInC();
+   			inTrue = true;
+   			curDepth = obj.getDepth();
+   		  }
+   		 }
 
-      curDepth = -1.0;
-      for (auto obj : eyebrows) {
-        res = obj.eval(x, y);
-        if (res && obj.getDepth() > curDepth) {
-        inC = obj.getInC();
-        inTrue = true;
-        curDepth = obj.getDepth();
-        }
-       }
-
-      if (inTrue) {
-        return inC;
-      }
-      else
-        return background;
+  		if (inTrue) {
+  			return inC;
+  		}
+  		else
+  			return background;
 
     }
 
@@ -98,12 +101,13 @@ class Pig {
       for (ellipse & s : snout) {
         s.translate(offset);
       }
-      for (ellipse & t : ears) {
+      for (Polygon & t : tail) {
         t.translate(offset);
       }
       for (Polygon & e : eyebrows) {
         e.translate(offset);
       }
+      belly.translate(offset); // does this need & ?
 
       return;
     }
@@ -114,8 +118,10 @@ class Pig {
         ellipse& bodyRound;
         std::vector<ellipse>& eyes;
         std::vector<ellipse>& snout;
-        std::vector<ellipse>& ears;
+        std::vector<Polygon>& tail;
         std::vector<Polygon>& eyebrows;
+        ellipse& belly;
+
 };
 
 
