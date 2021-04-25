@@ -201,11 +201,11 @@ int main(int argc, char *argv[]) {
 	//you will use these
 	vec2 trans1(-1, 1);
 	vec2 trans2(1, 1);
-	vec2 trans3(-1, -1);
+	// vec2 trans3(-1, -1); // not in use
 	vec2 accel(0, 1);
 
 	//loop through and produce more than on image - change to 30
-	for (int i=0; i < 30; i++) {
+	for (int i=0; i < 3; i++) {
 
 	  //set up unique filename that conforms to processing movie maker
 	  outFilename.append(argv[3]);
@@ -223,7 +223,6 @@ int main(int argc, char *argv[]) {
 		if (outFile) {
 		  cout << "writing an image of size: " << sizeX << " " << sizeY << " to: " << argv[3] << endl;
 		  theWriter.writeHeader(outFile);
-		   //uncomment when task 4 is done
 
 			blackBird.translate(trans1);
 			piggy.translate(trans2);
