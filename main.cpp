@@ -11,7 +11,7 @@
 #include "ellipse.h"
 #include "polygon.h"
 #include "bird.h"
-#include "bird.h"
+#include "pig.h"
 
 using namespace std;
 
